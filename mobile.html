@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>个人养老金投资收益计算器 - 移动版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.5;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #fff;
+            min-height: 100vh;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin: 0 0 5px;
+            color: #1890ff;
+            font-weight: 500;
+        }
+        
+        .subheading {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0 0 15px;
+        }
+        
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            margin: 0 -15px 20px;
+            padding: 0 15px;
+            -webkit-overflow-scrolling: touch;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tab-item {
+            padding: 12px 18px;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .tab-item.active {
+            color: #1890ff;
+            font-weight: bold;
+        }
+        
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #1890ff;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 15px 0;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            -webkit-appearance: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #1890ff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        button {
+            background-color: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 0;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:active {
+            background-color: #096dd9;
+            box-shadow: none;
+            transform: translateY(1px);
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        button:active::after {
+            opacity: 1;
+        }
+        
+        .input-tip {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .result-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #1890ff;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .result-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .result-summary {
+            margin-bottom: 15px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: #666;
+        }
+        
+        .summary-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .summary-value.positive {
+            color: #52c41a;
+        }
+        
+        .summary-value.negative {
+            color: #f5222d;
+        }
+        
+        .result-conclusion {
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+        
+        .conclusion-negative {
+            background-color: #fff2f0;
+            border-color: #ffccc7;
+        }
+        
+        .chart-container {
+            margin: 20px 0;
+            height: 250px;
+            position: relative;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tax-notice {
+            display: flex;
+            align-items: center;
+            background-color: #e6f7ff;
+            border-left: 3px solid #1890ff;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-size: 0.85rem;
+            color: #444;
+            border-radius: 4px;
+        }
+        
+        .tax-icon {
+            color: #1890ff;
+            font-style: normal;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        /* 数据表格样式优化 */
+        .data-table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 15px 0;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            table-layout: fixed; /* 添加固定表格布局 */
+            min-width: 500px; /* 确保在小屏幕上有最小宽度 */
+        }
+        
+        .data-table th {
+            background-color: #f5f5f5;
+            padding: 12px 8px;
+            text-align: center; /* 居中表头 */
+            border-bottom: 2px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-weight: 600;
+            white-space: nowrap; /* 防止表头换行 */
+        }
+        
+        .data-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            text-align: right; /* 数据靠右对齐 */
+            white-space: nowrap; /* 防止数据换行 */
+        }
+        
+        .data-table td:first-child {
+            text-align: center; /* 年份居中 */
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        
+        .data-table tr.highlight {
+            background-color: #e6f7ff;
+        }
+
+        /* 投资参考卡片优化 */
+        .investment-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px; /* 从原来的20px减少到15px */
+            margin-bottom: 15px; /* 从原来的20px减少到15px */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* 防止内容溢出 */
+        }
+        
+        .investment-card h3 {
+            margin-top: 0;
+            font-size: 1rem; /* 从1.1rem减小到1rem */
+            color: #333;
+            margin-bottom: 10px; /* 从15px减小到10px */
+            border-left: 3px solid #1890ff;
+            padding-left: 10px;
+        }
+        
+        .investment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* 从12px减小到8px */
+            margin-bottom: 10px; /* 从15px减小到10px */
+        }
+        
+        .investment-option {
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 10px; /* 从15px减小到10px */
+            border-left: 4px solid;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .investment-option h4 {
+            margin: 0 0 5px; /* 从8px减小到5px */
+            font-size: 0.95rem; /* 从1.05rem减小到0.95rem */
+        }
+        
+        .investment-option p {
+            margin: 3px 0; /* 从6px减小到3px */
+            font-size: 0.85rem; /* 从0.9rem减小到0.85rem */
+            color: #666;
+        }
+
+        /* 让表格在小屏幕上可以滚动 */
+        @media (max-width: 500px) {
+            .data-table-container {
+                margin: 10px -15px; /* 让表格容器可以超出内容区域 */
+                width: calc(100% + 30px); /* 增加宽度以使表格能完整显示 */
+                border-radius: 0;
+            }
+            
+            .investment-option {
+                padding: 12px 10px;
+            }
+            
+            .investment-option h4 {
+                font-size: 1rem;
+                margin-bottom: 6px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>个人养老金投资收益对比计算器</h1>
+            <p class="subheading">比较个人养老金与普通投资策略的长期收益</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab-item active" onclick="showTab('input')">计算输入</div>
+            <div class="tab-item" onclick="showTab('results')" id="results-tab">计算结果</div>
+            <div class="tab-item" onclick="showTab('details')" id="details-tab">详细数据</div>
+            <div class="tab-item" onclick="showTab('info')">投资参考</div>
+        </div>
+        
+        <div id="input" class="tab-content active">
+            <div class="policy-info">
+                <h3>个人养老金政策简介</h3>
+                <p>个人养老金是国家支持的补充养老保险制度。缴费额度上限为每年12000元，可享受税前扣除。</p>
+                <ul>
+                    <li><strong>税收优惠</strong>：缴费额可税前扣除，投资收益暂不征税</li>
+                    <li><strong>提取限制</strong>：达到法定退休年龄后才可领取</li>
+                    <li><strong>提取税率</strong>：提取时缴纳3%的个人所得税</li>
+                </ul>
+            </div>
+            
+            <form id="calculation-form">
+                <div class="form-group">
+                    <label for="annualContribution">年度养老金缴纳额 (X)：</label>
+                    <input type="number" id="annualContribution" placeholder="例如：12000" value="12000">
+                </div>
+                <div class="form-group">
+                    <label for="taxRefundRate">退税比例 (Y%)：</label>
+                    <input type="number" id="taxRefundRate" placeholder="例如：25" value="25">
+                </div>
+                <div class="form-group">
+                    <label for="pensionReturnRate">养老金账户年化收益率 (b%)：</label>
+                    <input type="number" id="pensionReturnRate" placeholder="例如：5" step="0.1" value="5">
+                </div>
+                <div class="form-group">
+                    <label for="regularReturnRate">普通投资年化收益率 (a%)：</label>
+                    <input type="number" id="regularReturnRate" placeholder="例如：8" step="0.1" value="8">
+                </div>
+                <div class="form-group">
+                    <label for="years">投资年限 (N)：</label>
+                    <input type="number" id="years" placeholder="例如：30" value="30">
+                    <p class="input-tip">提示：可按照"退休年龄 - 当前年龄"计算投资年限</p>
+                </div>
+                
+                <button type="button" onclick="calculate()">计算对比结果</button>
+            </form>
+        </div>
+        
+        <div id="results" class="tab-content">
+            <div class="result-card">
+                <div class="result-header">
+                    <div class="result-title">计算结果对比</div>
+                </div>
+                
+                <div class="result-summary">
+                    <div class="summary-row">
+                        <div class="summary-label">缴纳养老金策略 (S1)</div>
+                        <div id="pensionTotal" class="summary-value">-</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">普通投资策略 (S2)</div>
+                        <div id="regularTotal" class="summary-value">-</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">差额 (S1-S2)</div>
+                        <div id="difference" class="summary-value">-</div>
+                    </div>
+                </div>
+                
+                <div class="calculation-explanation">
+                    <strong>计算说明：</strong>
+                    <p>缴纳养老金策略 (S1)：每年缴纳X元养老金，养老金账户以b%年化收益率增长；次年获得Y%的退税金额，将退税金额以a%年化收益率投资。</p>
+                    <p>普通投资策略 (S2)：每年将X元以a%的年化收益率进行投资。</p>
+                </div>
+                
+                <div class="tax-notice">
+                    <i class="tax-icon">ⓘ</i> 养老金账户价值已考虑提取时需缴纳的3%个税
+                </div>
+                
+                <div id="result-conclusion" class="result-conclusion">
+                    请先进行计算
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="investmentChart"></canvas>
+            </div>
+        </div>
+        
+        <div id="details" class="tab-content">
+            <div class="data-table-container">
+                <table id="yearly-data-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>年份</th>
+                            <th>养老金账户</th>
+                            <th>退税投资</th>
+                            <th>S1总计</th>
+                            <th>普通投资(S2)</th>
+                            <th>差额</th>
+                        </tr>
+                    </thead>
+                    <tbody id="yearly-data-rows">
+                        <!-- 年度数据将在这里动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="info" class="tab-content">
+            <div class="investment-card">
+                <h3>养老金投资方式参考</h3>
+                <div class="investment-options">
+                    <div class="investment-option low-risk">
+                        <h4>储蓄存款</h4>
+                        <p>银行定期存款、大额存单</p>
+                        <p>收益率：<span class="return-rate">2-4%</span></p>
+                        <p>风险：⭐</p>
+                    </div>
+                    <div class="investment-option low-risk">
+                        <h4>保险产品</h4>
+                        <p>年金保险、养老保障管理产品</p>
+                        <p>收益率：<span class="return-rate">3-5%</span></p>
+                        <p>风险：⭐⭐</p>
+                    </div>
+                    <div class="investment-option medium-risk">
+                        <h4>债券型基金</h4>
+                        <p>国债、地方债、企业债基金</p>
+                        <p>收益率：<span class="return-rate">4-6%</span></p>
+                        <p>风险：⭐⭐⭐</p>
+                    </div>
+                    <div class="investment-option high-risk">
+                        <h4>混合/股票型基金</h4>
+                        <p>股票、混合型基金、指数基金</p>
+                        <p>收益率：<span class="return-rate">5-10%</span></p>
+                        <p>风险：⭐⭐⭐⭐</p>
+                    </div>
+                </div>
+                <p style="font-size: 0.85rem; color: #888; margin-top: 10px;">注：收益率仅供参考，实际收益受市场波动影响。投资应根据个人风险偏好选择适合的产品组合。</p>
+            </div>
+            
+            <div class="investment-card">
+                <h3>主要指数长期收益参考</h3>
+                <table class="data-table">
+                    <tr>
+                        <th>指数名称</th>
+                        <th>年化收益率</th>
+                        <th>统计期间</th>
+                    </tr>
+                    <tr>
+                        <td>标普500指数</td>
+                        <td class="return-rate">8.1%</td>
+                        <td>1993-2023</td>
+                    </tr>
+                    <tr>
+                        <td>纳斯达克100</td>
+                        <td class="return-rate">10.2%</td>
+                        <td>1993-2023</td>
+                    </tr>
+                    <tr>
+                        <td>沪深300指数</td>
+                        <td class="return-rate">7.3%</td>
+                        <td>2005-2023</td>
+                    </tr>
+                    <tr>
+                        <td>中证红利指数</td>
+                        <td class="return-rate">8.5%</td>
+                        <td>2005-2023</td>
+                    </tr>
+                </table>
+                <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">注：历史收益不代表未来表现。收益率为长期按月定投的年化收益。</p>
+            </div>
+            
+            <div class="investment-card">
+                <h3>影响策略选择的关键因素</h3>
+                <ul>
+                    <li><strong>投资年限</strong>：短期内养老金策略通常更具优势，长期投资时普通投资可能更优。</li>
+                    <li><strong>退税比例</strong>：退税比例越高，养老金策略越有优势。高收入群体(20%-45%)比低收入群体(3%-10%)更能从减税中获益。</li>
+                    <li><strong>收益率差距</strong>：两种策略的收益率差距越小，养老金策略越有优势。</li>
+                    <li><strong>通胀因素</strong>：所有计算基于名义收益率，实际决策应考虑扣除通胀后的实际收益率。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <button type="button" class="action-button" onclick="scrollToTop()">↑</button>
+    
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-item[onclick="showTab('${tabId}')"]`).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function calculate() {
+            const annualContribution = parseFloat(document.getElementById('annualContribution').value);
+            const taxRefundRate = parseFloat(document.getElementById('taxRefundRate').value) / 100;
+            const regularReturnRate = parseFloat(document.getElementById('regularReturnRate').value) / 100;
+            const pensionReturnRate = parseFloat(document.getElementById('pensionReturnRate').value) / 100;
+            const years = parseInt(document.getElementById('years').value);
+
+            if (isNaN(annualContribution) || isNaN(taxRefundRate) || isNaN(regularReturnRate) || 
+                isNaN(pensionReturnRate) || isNaN(years) || years <= 0) {
+                alert('请输入有效的数字！');
+                return;
+            }
+
+            if (regularReturnRate < pensionReturnRate) {
+                alert('普通投资收益率不能低于养老金账户收益率。\n当普通投资收益率更低时，养老金策略总是更优。');
+                return;
+            }
+
+            let maxDifference = -Infinity;
+            let maxDifferenceYear = 0;
+
+            let pensionAccountValue = 0;
+            let regularInvestmentFromRefunds = 0;
+            let regularInvestmentTotal = 0;
+
+            let yearlyData = [];
+
+            for (let year = 1; year <= years; year++) {
+                pensionAccountValue = pensionAccountValue * (1 + pensionReturnRate) + annualContribution;
+
+                if (year > 1) {
+                    regularInvestmentFromRefunds = regularInvestmentFromRefunds * (1 + regularReturnRate);
+                }
+
+                let thisYearRefund = 0;
+                if (year < years) {
+                    thisYearRefund = annualContribution * taxRefundRate;
+                    regularInvestmentFromRefunds += thisYearRefund;
+                }
+
+                regularInvestmentTotal = regularInvestmentTotal * (1 + regularReturnRate) + annualContribution;
+
+                const pensionAfterTax = pensionAccountValue * 0.97;
+                const s1Total = pensionAfterTax + regularInvestmentFromRefunds;
+                const s2Total = regularInvestmentTotal;
+                const difference = s1Total - s2Total;
+
+                if (difference > maxDifference) {
+                    maxDifference = difference;
+                    maxDifferenceYear = year;
+                }
+
+                yearlyData.push({
+                    year: year,
+                    pensionValue: pensionAccountValue,
+                    pensionAfterTax: pensionAfterTax,
+                    refundValue: regularInvestmentFromRefunds,
+                    s1Total: s1Total,
+                    s2Total: s2Total,
+                    difference: difference,
+                    refundAdded: thisYearRefund,
+                    isMaxDifference: false
+                });
+            }
+
+            if (maxDifferenceYear > 0 && maxDifferenceYear <= yearlyData.length) {
+                yearlyData[maxDifferenceYear - 1].isMaxDifference = true;
+            }
+
+            const S1 = yearlyData[years - 1].s1Total;
+            const S2 = yearlyData[years - 1].s2Total;
+            const difference = S1 - S2;
+
+            document.getElementById('pensionTotal').textContent = S1.toLocaleString('zh-CN', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }) + '元';
+
+            document.getElementById('regularTotal').textContent = S2.toLocaleString('zh-CN', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }) + '元';
+
+            const differenceElement = document.getElementById('difference');
+            differenceElement.textContent = Math.abs(difference).toLocaleString('zh-CN', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }) + '元';
+
+            if (difference > 0) {
+                differenceElement.style.color = '#52c41a';
+                differenceElement.textContent = '+' + differenceElement.textContent;
+            } else if (difference < 0) {
+                differenceElement.style.color = '#f5222d';
+                differenceElement.textContent = '-' + differenceElement.textContent;
+            }
+
+            const conclusion = document.getElementById('result-conclusion');
+            if (difference > 0) {
+                conclusion.textContent = '结论：缴纳养老金策略更优';
+                conclusion.className = 'result-conclusion';
+            } else {
+                conclusion.textContent = '结论：普通投资策略更优';
+                conclusion.className = 'result-conclusion conclusion-negative';
+            }
+
+            const yearlyDataRows = document.getElementById('yearly-data-rows');
+            yearlyDataRows.innerHTML = '';
+
+            yearlyData.forEach(data => {
+                const row = document.createElement('tr');
+                if (data.isMaxDifference) {
+                    row.classList.add('highlight');
+                }
+                row.innerHTML = `
+                    <td>${data.year}${data.isMaxDifference ? ' ★' : ''}</td>
+                    <td>${Math.round(data.pensionAfterTax).toLocaleString()}</td>
+                    <td>${Math.round(data.refundValue).toLocaleString()}</td>
+                    <td>${Math.round(data.s1Total).toLocaleString()}</td>
+                    <td>${Math.round(data.s2Total).toLocaleString()}</td>
+                    <td style="color: ${data.difference > 0 ? '#52c41a' : '#f5222d'}">${data.difference > 0 ? '+' : ''}${Math.round(data.difference).toLocaleString()}</td>
+                `;
+                yearlyDataRows.appendChild(row);
+            });
+
+            generateChart(yearlyData);
+            showTab('results');
+        }
+
+        function generateChart(yearlyData) {
+            const ctx = document.getElementById('investmentChart').getContext('2d');
+            const years = yearlyData.map(data => `${data.year}`);
+            const s1Values = yearlyData.map(data => data.s1Total);
+            const s2Values = yearlyData.map(data => data.s2Total);
+
+            if (window.investmentChart instanceof Chart) {
+                window.investmentChart.destroy();
+            }
+
+            window.investmentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {
+                            label: '养老金策略(S1)',
+                            data: s1Values,
+                            backgroundColor: 'rgba(24, 144, 255, 0.1)',
+                            borderColor: 'rgba(24, 144, 255, 1)',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            pointHoverRadius: 5,
+                            tension: 0.3
+                        },
+                        {
+                            label: '普通投资(S2)',
+                            data: s2Values,
+                            backgroundColor: 'rgba(82, 196, 26, 0.1)',
+                            borderColor: 'rgba(82, 196, 26, 1)',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            pointHoverRadius: 5,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value >= 10000) {
+                                        return (value / 10000) + '万';
+                                    }
+                                    return value;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toLocaleString('zh-CN') + '元';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function estimateTaxRate() {
+            const annualIncome = parseFloat(document.getElementById('annualIncome').value);
+            if (isNaN(annualIncome) || annualIncome <= 0) {
+                alert('请输入有效的年收入金额');
+                return;
+            }
+
+            let taxRate;
+            if (annualIncome <= 36000) {
+                taxRate = 3;
+            } else if (annualIncome <= 144000) {
+                taxRate = 10;
+            } else if (annualIncome <= 300000) {
+                taxRate = 20;
+            } else if (annualIncome <= 420000) {
+                taxRate = 25;
+            } else if (annualIncome <= 660000) {
+                taxRate = 30;
+            } else {
+                taxRate = 35;
+            }
+
+            const resultElement = document.getElementById('taxRateResult');
+            resultElement.style.display = 'block';
+            resultElement.innerHTML = `预估退税比例：<span style="color:#1890ff; font-size:16px;">${taxRate}%</span>`;
+            document.getElementById('taxRefundRate').value = taxRate;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            calculate();
+            
+            // 为投资选项添加触摸反馈
+            document.querySelectorAll('.investment-option').forEach(option => {
+                option.addEventListener('touchstart', function() {
+                    this.style.backgroundColor = '#f0f0f0';
+                });
+                
+                option.addEventListener('touchend', function() {
+                    this.style.backgroundColor = '#fafafa';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
