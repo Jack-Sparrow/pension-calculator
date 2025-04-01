@@ -436,6 +436,100 @@
                 margin-bottom: 6px;
             }
         }
+
+        /* 参数摘要卡片样式 */
+        .input-summary-card {
+            background-color: #fafafa;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .input-summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .input-summary-title {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .input-summary-button {
+            background-color: #f0f0f0;
+            color: #1890ff;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            margin: 0;
+            width: auto;
+            box-shadow: none;
+        }
+        
+        .input-summary-button:active {
+            background-color: #e6e6e6;
+            transform: none;
+        }
+        
+        .input-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .input-summary-item {
+            background-color: #fff;
+            border-radius: 6px;
+            padding: 6px 8px;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .input-summary-label {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        
+        .input-summary-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 3px;
+            color: #1890ff;
+        }
+        
+        /* 超小屏幕适配 */
+        @media (max-width: 360px) {
+            .input-summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-summary-item {
+                grid-column: 1 !important;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            right: 1rem;
+            bottom: 2rem;
+            width: 36px;
+            height: 36px;
+            background-color: #1890ff;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 999;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -492,6 +586,35 @@
         </div>
         
         <div id="results" class="tab-content">
+            <div class="input-summary-card">
+                <div class="input-summary-header">
+                    <div class="input-summary-title">计算参数</div>
+                    <button class="input-summary-button" onclick="showTab('input')">重新输入</button>
+                </div>
+                <div class="input-summary-grid">
+                    <div class="input-summary-item">
+                        <div class="input-summary-label">缴纳额 (X)</div>
+                        <div class="input-summary-value" id="summary-contribution">-</div>
+                    </div>
+                    <div class="input-summary-item">
+                        <div class="input-summary-label">退税比例 (Y)</div>
+                        <div class="input-summary-value" id="summary-tax-rate">-</div>
+                    </div>
+                    <div class="input-summary-item">
+                        <div class="input-summary-label">养老金收益率 (b)</div>
+                        <div class="input-summary-value" id="summary-pension-rate">-</div>
+                    </div>
+                    <div class="input-summary-item">
+                        <div class="input-summary-label">普通收益率 (a)</div>
+                        <div class="input-summary-value" id="summary-regular-rate">-</div>
+                    </div>
+                    <div class="input-summary-item" style="grid-column: span 2;">
+                        <div class="input-summary-label">投资年限 (N)</div>
+                        <div class="input-summary-value" id="summary-years">-</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="result-card">
                 <div class="result-header">
                     <div class="result-title">计算结果对比</div>
@@ -631,7 +754,7 @@
         </div>
     </div>
     
-    <button type="button" class="action-button" onclick="scrollToTop()">↑</button>
+    <div class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">↑</div>
     
     <script>
         function showTab(tabId) {
@@ -670,6 +793,13 @@
                 alert('普通投资收益率不能低于养老金账户收益率。\n当普通投资收益率更低时，养老金策略总是更优。');
                 return;
             }
+
+            // 更新参数摘要区域
+            document.getElementById('summary-contribution').textContent = annualContribution.toLocaleString('zh-CN') + '元';
+            document.getElementById('summary-tax-rate').textContent = (taxRefundRate * 100).toFixed(0) + '%';
+            document.getElementById('summary-pension-rate').textContent = (pensionReturnRate * 100).toFixed(1) + '%';
+            document.getElementById('summary-regular-rate').textContent = (regularReturnRate * 100).toFixed(1) + '%';
+            document.getElementById('summary-years').textContent = years + '年';
 
             let maxDifference = -Infinity;
             let maxDifferenceYear = 0;
