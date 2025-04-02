@@ -1164,8 +1164,11 @@
                             }
                         },
                         tooltip: {
-                            mode: 'index',
-                            intersect: false,
+                            enabled: true,
+                            mode: 'nearest',
+                            intersect: true,
+                            position: 'nearest',
+                            axis: 'x',
                             callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
@@ -1177,7 +1180,8 @@
                                     }
                                     return label;
                                 }
-                            }
+                            },
+                            events: ['mousemove', 'mouseout', 'touchstart', 'touchmove']
                         }
                     }
                 }
@@ -1300,6 +1304,23 @@
                 option.addEventListener('touchend', function() {
                     this.style.backgroundColor = '#fafafa';
                 });
+            });
+            
+            // 为图表容器添加触摸结束事件，隐藏tooltip
+            document.querySelector('.chart-container').addEventListener('touchend', function(event) {
+                if (window.investmentChart) {
+                    window.investmentChart.tooltip.active = false;
+                    window.investmentChart.draw();
+                }
+            });
+            
+            // 为整个文档添加触摸开始事件，任何触摸都可能隐藏tooltip
+            document.addEventListener('touchstart', function(event) {
+                const chartContainer = document.querySelector('.chart-container');
+                if (!chartContainer.contains(event.target) && window.investmentChart) {
+                    window.investmentChart.tooltip.active = false;
+                    window.investmentChart.draw();
+                }
             });
         });
     </script>
