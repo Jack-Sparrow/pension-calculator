@@ -530,6 +530,67 @@
             cursor: pointer;
             z-index: 999;
         }
+
+        /* 税率查询帮助器样式 */
+        .tax-rate-helper {
+            margin-top: 5px;
+            font-size: 13px;
+            color: #666;
+            padding: 5px;
+            background: #f5f5f5;
+            border-radius: 3px;
+        }
+        
+        .tax-rate-helper summary {
+            cursor: pointer;
+            color: #1890ff;
+            font-weight: 500;
+        }
+        
+        .tax-rate-helper-content {
+            margin-top: 8px;
+        }
+        
+        .tax-rate-helper input {
+            width: 70%;
+            display: inline-block;
+        }
+        
+        .tax-rate-helper-button {
+            width: 25%;
+            display: inline-block;
+            margin-left: 5px;
+            padding: 7px 0;
+        }
+        
+        .tax-rate-table {
+            margin-top: 8px;
+            width: 100%;
+            font-size: 12px;
+        }
+        
+        .tax-rate-table th, 
+        .tax-rate-table td {
+            padding: 3px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .tax-rate-table th {
+            background: #f1f1f1;
+        }
+
+        .income-tip {
+            font-size: 12px;
+            color: #888;
+            margin-top: 3px;
+            font-style: italic;
+        }
+        
+        .income-tip strong {
+            color: #ff4d4f;
+            font-weight: normal;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -566,6 +627,54 @@
                 <div class="form-group">
                     <label for="taxRefundRate">退税比例 (Y%)：</label>
                     <input type="number" id="taxRefundRate" placeholder="例如：25" value="25">
+                    
+                    <details class="tax-rate-helper">
+                        <summary>不知道我的退税比例？点击查询</summary>
+                        <div class="tax-rate-helper-content">
+                            <p>输入您的年收入(税前)，我们将估算您的退税比例</p>
+                            <input type="number" id="annualIncome" placeholder="例如：120000">
+                            <button type="button" class="tax-rate-helper-button" onclick="estimateTaxRate()">查询</button>
+                            
+                            <p class="income-tip">提示：<strong>应包含</strong>全年工资、奖金、年终奖等所有个税前收入。若<strong>年终奖单独计税</strong>，则无需计入。</p>
+                            
+                            <div id="taxRateResult" style="margin-top: 8px; font-weight: bold; display: none;"></div>
+                            
+                            <table class="tax-rate-table">
+                                <tr>
+                                    <th>年收入区间(元)</th>
+                                    <th>适用税率</th>
+                                </tr>
+                                <tr>
+                                    <td>≤ 36,000</td>
+                                    <td>3%</td>
+                                </tr>
+                                <tr>
+                                    <td>36,001 - 144,000</td>
+                                    <td>10%</td>
+                                </tr>
+                                <tr>
+                                    <td>144,001 - 300,000</td>
+                                    <td>20%</td>
+                                </tr>
+                                <tr>
+                                    <td>300,001 - 420,000</td>
+                                    <td>25%</td>
+                                </tr>
+                                <tr>
+                                    <td>420,001 - 660,000</td>
+                                    <td>30%</td>
+                                </tr>
+                                <tr>
+                                    <td>660,001 - 960,000</td>
+                                    <td>35%</td>
+                                </tr>
+                                <tr>
+                                    <td>> 960,000</td>
+                                    <td>45%</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </details>
                 </div>
                 <div class="form-group">
                     <label for="pensionReturnRate">养老金账户年化收益率 (b%)：</label>
