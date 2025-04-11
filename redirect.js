@@ -14,12 +14,12 @@
     }
     
     // 如果是移动设备且当前不在移动页面，则重定向
-    if (isMobileDevice() && getCurrentPage() !== "mobile.html") {
-        window.location.href = "mobile.html";
+    if (isMobileDevice() && getCurrentPage() !== "pension-mobile.html") {
+        window.location.href = "pension-mobile.html";
     }
     
     // 如果是桌面设备且当前在移动页面，则重定向
-    if (!isMobileDevice() && getCurrentPage() === "mobile.html") {
-        window.location.href = "index.html";
+    if (!isMobileDevice() && getCurrentPage() === "pension-mobile.html") {
+        window.location.href = "pension-pc.html";
     }
 })();
