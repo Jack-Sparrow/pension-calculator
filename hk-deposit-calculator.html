@@ -88,7 +88,7 @@
             padding: 1rem;
             background-color: var(--light-bg);
             border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
+            border-left: 4px solid var (--primary-color);
         }
         
         .flow-diagram {
@@ -101,27 +101,31 @@
         
         .flow-steps {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
         }
         
         .flow-step {
             text-align: center;
             padding: 1rem;
-            flex: 1;
-            min-width: 120px;
+            width: 100%;
+            max-width: 250px;
             position: relative;
+            margin-bottom: 2rem;
         }
         
         .flow-step:not(:last-child)::after {
-            content: "→";
+            content: "↓";
             position: absolute;
-            right: -10px;
-            top: 50%;
-            transform: translateY(-50%);
+            left: 50%;
+            bottom: -25px;
+            transform: translateX(-50%);
             font-size: 1.5rem;
             color: var(--light-text);
+        }
+        
+        .flow-step:last-child {
+            margin-bottom: 0;
         }
         
         .flow-icon {
@@ -222,24 +226,16 @@
         
         .method-comparison {
             display: flex;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 1.5rem;
-            margin-top: 2rem;
         }
         
         .method-card {
             flex: 1;
-            min-width: 250px;
-            padding: 1.5rem;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s;
-        }
-        
-        .method-card.best {
-            border: 2px solid var(--accent-color);
-            transform: scale(1.02);
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
         }
         
         .method-header {
@@ -303,67 +299,6 @@
             vertical-align: middle;
         }
         
-        .exchange-rate-panel {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            padding: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .exchange-rate-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .refresh-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .refresh-btn:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        .rates-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-        
-        .rate-item {
-            flex: 1;
-            min-width: 200px;
-            background-color: var(--light-bg);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .rate-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin: 0.5rem 0;
-        }
-        
-        .rate-date {
-            font-size: 0.8rem;
-            color: var(--light-text);
-        }
-        
         .loading-spinner {
             display: inline-block;
             width: 16px;
@@ -410,23 +345,6 @@
                 margin-bottom: 0;
             }
             
-            .flow-steps {
-                flex-direction: column;
-            }
-            
-            .flow-step {
-                width: 100%;
-                margin-bottom: 1rem;
-            }
-            
-            .flow-step:not(:last-child)::after {
-                content: "↓";
-                right: 50%;
-                bottom: -15px;
-                top: auto;
-                transform: translateX(50%);
-            }
-            
             .method-card {
                 min-width: 100%;
             }
@@ -466,7 +384,7 @@
             min-width: 300px;
         }
         
-        /* 调整流程步骤为更紧凑的设计 */
+        /* 调整流程步骤为更紧凧的设计 */
         .flow-steps {
             margin: 1rem 0;
         }
@@ -562,6 +480,764 @@
                 min-width: 80px;
             }
         }
+        
+        /* 移动端实时汇率水平排列 */
+        @media (max-width: 768px) {
+            .rates-container {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 0.5rem; /* 为滚动条留出空间 */
+                margin-bottom: 0.5rem;
+                -webkit-overflow-scrolling: touch; /* 提高iOS滚动体验 */
+            }
+            
+            .rate-item {
+                flex: 0 0 260px; /* 固定宽度，不缩放 */
+                min-width: 260px;
+                margin-right: 0.5rem;
+            }
+            
+            .rate-item:last-child {
+                margin-right: 0;
+            }
+            
+            /* 美化滚动条 */
+            .rates-container::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .rates-container::-webkit-scrollbar-thumb {
+                background-color: var(--border-color);
+                border-radius: 4px;
+            }
+            
+            .rates-container::-webkit-scrollbar-track {
+                background-color: transparent;
+            }
+        }
+        
+        .rate-reference {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            font-weight: normal;
+            margin-left: 8px;
+        }
+        
+        /* Add CSS for method groups */
+        .method-group {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .method-group h4 {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+        }
+        
+        .common-inputs {
+            margin-bottom: 2rem;
+        }
+
+        /* Add CSS for rate toggle */
+        .rate-toggle {
+            display: flex;
+            margin-bottom: 0.5rem;
+            background-color: var(--light-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            width: fit-content;
+        }
+        
+        .rate-toggle-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        
+        .rate-toggle-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Add styling for breakeven analysis */
+        .breakeven-analysis {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .breakeven-analysis h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .breakeven-card {
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: 6px;
+        }
+        
+        .breakeven-card ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .breakeven-card li {
+            margin-bottom: 0.5rem;
+        }
+        
+        #method1-range-value, #method2-range-value, #breakeven-amount {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Fee input styles */
+        .fee-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .fee-input {
+            flex: 1;
+        }
+        
+        .fee-total {
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            margin-top: 0.5rem;
+        }
+
+        /* Fee currency toggle styles */
+        .fee-currency-toggle {
+            display: flex;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .fee-currency-option {
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .fee-currency-option input[type="radio"] {
+            margin-right: 0.3rem;
+            width: auto;
+        }
+
+        /* 调整流程步骤为横向紧凑的设计 */
+        .flow-steps {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+        }
+        
+        .flow-step {
+            text-align: center;
+            padding: 0.5rem;
+            position: relative;
+            min-width: 70px;
+            flex: 1;
+        }
+        
+        .flow-step:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            top: 50%;
+            right: -12px;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--light-text);
+        }
+        
+        .flow-icon {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 0.9rem;
+            margin: 0 auto 0.5rem;
+        }
+        
+        .flow-step h4 {
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .flow-step p {
+            font-size: 0.75rem;
+            margin: 0;
+            color: var(--light-text);
+        }
+        
+        /* 隐藏详细步骤金额 */
+        .step-amount {
+            display: none;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .flow-steps {
+                flex-direction: column;
+            }
+            
+            .flow-step {
+                margin-bottom: 1.5rem;
+                width: 100%;
+            }
+            
+            .flow-step:not(:last-child)::after {
+                content: "↓";
+                right: auto;
+                top: auto;
+                bottom: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        
+        /* 新增样式：底部对比结果区域 */
+        .comparison-results {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .result-cards {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .result-card {
+            flex: 1;
+            min-width: 250px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .result-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .final-amount {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+        
+        .final-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        /* 修改方式流程样式 */
+        .deposit-methods {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .result-card {
+                min-width: 100%;
+            }
+        }
+
+        /* Styles for highlighting the best method */
+        .result-card.best {
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 10px rgba(52, 168, 83, 0.2);
+        }
+        
+        .result-card .result-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: white;
+            background-color: var(--accent-color);
+        }
+
+        /* 重新设计流程图样式 */
+        .deposit-methods {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .method-flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .method-flow {
+            position: relative;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: var(--light-bg);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .method-flow-title {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .flow-path {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            position: relative;
+            padding: 0 1rem;
+        }
+        
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .flow-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .flow-step-number {
+            font-size: 0.8rem;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+        
+        .flow-connector {
+            flex-grow: 1;
+            height: 3px;
+            background-color: var(--border-color);
+            position: relative;
+            z-index: 1;
+            margin: 0 5px;
+        }
+        
+        .flow-connector::after {
+            content: '→';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .flow-details {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            width: 120px;
+            text-align: center;
+            padding-top: 0.5rem;
+        }
+        
+        .flow-details h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .flow-details p {
+            color: var(--light-text);
+            font-size: 0.75rem;
+            line-height: 1.2;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .flow-path {
+                flex-direction: column;
+                padding: 1rem 0;
+                gap: 2.5rem;
+            }
+            
+            .flow-connector {
+                width: 3px;
+                height: 30px;
+                margin: 0;
+            }
+            
+            .flow-connector::after {
+                content: '↓';
+                top: auto;
+                right: auto;
+                bottom: -15px;
+                left: -5px;
+            }
+            
+            .flow-details {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* 重新设计流程图样式 - 更紧凑的版本 */
+        .deposit-methods {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .method-flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .method-flow {
+            position: relative;
+            padding: 1.2rem;
+            border-radius: 8px;
+            background-color: var(--light-bg);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .method-flow-title {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .flow-path {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            position: relative;
+            padding: 0 1rem;
+            margin-bottom: 2rem; /* Add space for the details below */
+        }
+        
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            background-color: white;
+            padding: 0.6rem;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        
+        .flow-icon {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            line-height: 1;
+            font-style: normal;
+        }
+        
+        .flow-step-number {
+            font-size: 0.7rem;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -3px;
+            right: -3px;
+        }
+        
+        .flow-connector {
+            flex-grow: 1;
+            height: 2px;
+            background-color: var(--border-color);
+            position: relative;
+            z-index: 1;
+            margin: 0 8px;
+            max-width: 60px;
+        }
+        
+        .flow-connector::after {
+            content: '→';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .flow-details {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            width: 110px;
+            text-align: center;
+            padding-top: 0.3rem;
+        }
+        
+        .flow-details h4 {
+            font-size: 0.85rem;
+            margin-bottom: 0.1rem;
+            color: var(--text-color);
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        
+        .flow-details p {
+            color: var(--light-text);
+            font-size: 0.7rem;
+            line-height: 1.2;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .flow-path {
+                flex-direction: row; /* Keep horizontal on mobile */
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px 40px;
+                margin-bottom: 0;
+            }
+            
+            .flow-node {
+                margin-bottom: 45px; /* Space for details text */
+            }
+            
+            .flow-connector {
+                display: none; /* Hide connectors on mobile */
+            }
+            
+            .flow-details {
+                position: absolute;
+                top: 65px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 380px) {
+            .flow-node {
+                width: 50px;
+                height: 50px;
+                padding: 0.4rem;
+            }
+            
+            .flow-icon {
+                font-size: 1rem;
+            }
+            
+            .flow-details {
+                top: 55px;
+                width: 90px;
+            }
+            
+            .flow-details h4 {
+                font-size: 0.75rem;
+            }
+            
+            .flow-details p {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* 简洁紧凑的流程图样式 */
+        .deposit-methods {
+            margin-top: 2rem;
+            padding: 1.2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .method-flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .method-flow {
+            padding: 1rem;
+            border-radius: 6px;
+            background-color: var(--light-bg);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .method-flow-title {
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .flow-timeline {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin: 0.8rem 0 0.3rem;
+        }
+
+        .flow-step-simple {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .flow-num {
+            background-color: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            font-size: 0.75rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .flow-label {
+            font-size: 0.8rem;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 80px;
+        }
+
+        .flow-line {
+            height: 2px;
+            background-color: var(--border-color);
+            flex-grow: 1;
+            position: absolute;
+            top: 12px;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        /* Mobile styling */
+        @media (max-width: 520px) {
+            .flow-label {
+                font-size: 0.7rem;
+                max-width: 70px;
+            }
+            
+            .flow-num {
+                width: 20px;
+                height: 20px;
+                font-size: 0.7rem;
+            }
+            
+            .flow-line {
+                top: 10px;
+            }
+        }
+
+        /* Hide old flow styles */
+        .flow-connector, .flow-node, .flow-icon, .flow-details, .flow-path, .flow-step-number {
+            display: none;
+        }
+
+        /* 快捷金额按钮样式 */
+        .quick-amount-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .quick-amount-btn {
+            padding: 0.4rem 0.6rem;
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quick-amount-btn:hover, .quick-amount-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
     </style>
 </head>
 <body>  
@@ -575,108 +1251,205 @@
                 <h3>美元入金方案对比</h3>
                 <p>从大陆银行人民币账户到香港券商的美元入金有两种常见方式。请填写下面的表单，我们将为您计算并对比各种方式的最终结果，帮您找出最优方案。</p>
             </div>
+            
+            <!-- 重新设计入金流程展示 -->
+            <div class="deposit-methods" id="deposit-methods">
+                <h3>入金方式流程</h3>
+                <div class="method-flow-container">
+                    <div class="method-flow">
+                        <div class="method-flow-title">方式一: 先入金再兑换</div>
+                        <div class="flow-timeline">
+                            <div class="flow-step-simple">
+                                <div class="flow-num">1</div>
+                                <div class="flow-label">人民币兑换港币</div>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="flow-step-simple">
+                                <div class="flow-num">2</div>
+                                <div class="flow-label">跨境汇款</div>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="flow-step-simple">
+                                <div class="flow-num">3</div>
+                                <div class="flow-label">eDDA入金</div>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="flow-step-simple">
+                                <div class="flow-num">4</div>
+                                <div class="flow-label">兑换美元</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="method-flow">
+                        <div class="method-flow-title">方式二: 直接美元入金</div>
+                        <div class="flow-timeline">
+                            <div class="flow-step-simple">
+                                <div class="flow-num">1</div>
+                                <div class="flow-label">人民币兑换美元</div>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="flow-step-simple">
+                                <div class="flow-num">2</div>
+                                <div class="flow-label">跨境汇款</div>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="flow-step-simple">
+                                <div class="flow-num">3</div>
+                                <div class="flow-label">入金</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="calculator-form">
                 <h3>费用与汇率设置</h3>
                 <form id="usd-form">
-                    <div class="form-group">
-                        <label for="usd-rmb-amount">初始人民币金额 (CNY)</label>
-                        <input type="number" id="usd-rmb-amount" min="0" step="1000" value="10000">
+                    <div class="common-inputs">
+                        <div class="form-group">
+                            <label for="usd-rmb-amount">初始人民币金额 (CNY)</label>
+                            <input type="number" id="usd-rmb-amount" min="0" step="1000" value="50000">
+                            <div class="quick-amount-buttons">
+                                <button type="button" class="quick-amount-btn" data-amount="100000">10万</button>
+                                <button type="button" class="quick-amount-btn" data-amount="200000">20万</button>
+                                <button type="button" class="quick-amount-btn" data-amount="500000">50万</button>
+                                <button type="button" class="quick-amount-btn" data-amount="1000000">100万</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="rmb-to-hkd-rate">大陆银行人民币兑港币汇率 (a)</label>
-                        <input type="number" id="rmb-to-hkd-rate" min="0" step="0.001" value="0.89">
+                    
+                    <!-- 方式一: 先入金再兑换 -->
+                    <div class="method-group">
+                        <h4>方式一: 先入金再兑换的参数</h4>
+                        <div class="form-group">
+                            <label for="rmb-to-hkd-rate">港币 - 银行外汇卖出价 (a) <span id="hkd-rate-reference" class="rate-reference"></span></label>
+                            <input type="number" id="rmb-to-hkd-rate" min="0" step="0.001" value="0.89" title="银行卖出价: 1 HKD 需要兑换多少人民币">
+                        </div>
+                        <div class="form-group">
+                            <label for="hkd-transfer-fee-fixed">港币跨境汇款手续费 (b)</label>
+                            <div class="fee-inputs">
+                                <div class="fee-input">
+                                    <label for="hkd-transfer-fee-fixed" style="font-weight: normal;">
+                                        固定手续费 (<span id="hkd-fee-currency-label">CNY</span>)
+                                    </label>
+                                    <input type="number" id="hkd-transfer-fee-fixed" min="0" step="1" value="0">
+                                    <div class="fee-currency-toggle">
+                                        <label class="fee-currency-option">
+                                            <input type="radio" name="hkd-fee-currency" value="HKD"> 从港币中扣除
+                                        </label>
+                                        <label class="fee-currency-option">
+                                            <input type="radio" name="hkd-fee-currency" value="CNY" checked> 从人民币中扣除
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="fee-input">
+                                    <label for="hkd-transfer-fee-percent" style="font-weight: normal;">比例手续费 (%)</label>
+                                    <input type="number" id="hkd-transfer-fee-percent" min="0" max="100" step="0.01" value="0">
+                                </div>
+                            </div>
+                            <div class="fee-total" id="hkd-fee-total">总手续费: HK$0.00</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="broker-hkd-to-usd">券商汇率 (d) <span id="hkd-usd-rate-reference" class="rate-reference"></span></label>
+                            
+                            <div class="rate-toggle">
+                                <button type="button" id="hkd-to-usd-toggle" class="rate-toggle-btn active">港币→美元</button>
+                                <button type="button" id="usd-to-hkd-toggle" class="rate-toggle-btn">美元→港币</button>
+                            </div>
+                            
+                            <div id="hkd-to-usd-input-group">
+                                <input type="number" id="broker-hkd-to-usd" min="0" step="0.001" value="0.128" 
+                                       title="券商汇率: 1 HKD 能兑换多少 USD">
+                            </div>
+                            <div id="usd-to-hkd-input-group" style="display: none;">
+                                <input type="number" id="broker-usd-to-hkd" min="0" step="0.01" value="7.8" 
+                                       title="券商汇率: 1 USD 能兑换多少 HKD">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="hkd-transfer-fee-usd">港币跨境汇款手续费 (b)</label>
-                        <input type="number" id="hkd-transfer-fee-usd" min="0" step="1" value="150">
+                    
+                    <!-- 方式二: 直接美元入金 -->
+                    <div class="method-group">
+                        <h4>方式二: 直接美元入金的参数</h4>
+                        <div class="form-group">
+                            <label for="rmb-to-usd-rate">美元 - 银行外汇卖出价 (g) <span id="usd-rate-reference" class="rate-reference"></span></label>
+                            <input type="number" id="rmb-to-usd-rate" min="0" step="0.001" value="7.22" title="银行卖出价: 1 USD 需要兑换多少人民币">
+                        </div>
+                        <div class="form-group">
+                            <label for="usd-transfer-fee-fixed">美元跨境汇款手续费 (h)</label>
+                            <div class="fee-inputs">
+                                <div class="fee-input">
+                                    <label for="usd-transfer-fee-fixed" style="font-weight: normal;">
+                                        固定手续费 (<span id="usd-fee-currency-label">CNY</span>)
+                                    </label>
+                                    <input type="number" id="usd-transfer-fee-fixed" min="0" step="0.1" value="0">
+                                    <div class="fee-currency-toggle">
+                                        <label class="fee-currency-option">
+                                            <input type="radio" name="usd-fee-currency" value="USD"> 从美元中扣除
+                                        </label>
+                                        <label class="fee-currency-option">
+                                            <input type="radio" name="usd-fee-currency" value="CNY" checked> 从人民币中扣除
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="fee-input">
+                                    <label for="usd-transfer-fee-percent" style="font-weight: normal;">比例手续费 (%)</label>
+                                    <input type="number" id="usd-transfer-fee-percent" min="0" max="100" step="0.01" value="0">
+                                </div>
+                            </div>
+                            <div class="fee-total" id="usd-fee-total">总手续费: $0.00</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="usd-deposit-fee">美元入金手续费 (f)</label>
+                            <input type="number" id="usd-deposit-fee" min="0" step="0.1" value="25">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="broker-hkd-to-usd">券商港币兑美元汇率 (d)</label>
-                        <input type="number" id="broker-hkd-to-usd" min="0" step="0.001" value="0.128">
-                    </div>
-                    <div class="form-group">
-                        <label for="rmb-to-usd-rate">大陆银行人民币兑美元汇率 (g)</label>
-                        <input type="number" id="rmb-to-usd-rate" min="0" step="0.001" value="0.1385">
-                    </div>
-                    <div class="form-group">
-                        <label for="usd-transfer-fee">美元跨境汇款手续费 (h)</label>
-                        <input type="number" id="usd-transfer-fee" min="0" step="0.1" value="40">
-                    </div>
-                    <div class="form-group">
-                        <label for="usd-deposit-fee">美元入金手续费 (f)</label>
-                        <input type="number" id="usd-deposit-fee" min="0" step="0.1" value="25">
-                    </div>
+                    
                     <button type="button" class="btn btn-block" id="usd-calculate">计算并比较</button>
                 </form>
             </div>
-            <div class="calculation-results" id="usd-results">
+            
+            <!-- 新增底部对比结果区域 -->
+            <div class="comparison-results" id="comparison-results">
                 <h3>计算结果对比</h3>
-                <div class="method-comparison" id="usd-comparison">
-                    <div class="method-card" id="method1-card">
-                        <div class="method-header">
+                <div class="result-cards">
+                    <div class="result-card" id="method1-result">
+                        <div class="result-header">
                             <h4>方式一: 先入金再兑换</h4>
                             <span class="result-badge" id="method1-badge"></span>
                         </div>
-                        <div class="flow-steps">
-                            <div class="flow-step">
-                                <div class="flow-icon">1</div>
-                                <h4>人民币兑换港币 <span class="param-badge">a</span></h4>
-                                <p>大陆银行账户内兑换</p>
-                                <div class="step-amount" id="method1-step1-amount">¥10,000 → HK$8,900</div>
+                        <div class="result-content">
+                            <div class="final-amount">
+                                <span>最终美元余额:</span>
+                                <span id="method1-final" class="final-value">$1,120.00</span>
                             </div>
-                            <div class="flow-step">
-                                <div class="flow-icon">2</div>
-                                <h4>跨境汇款 <span class="param-badge">b</span></h4>
-                                <p>港币汇至香港银行</p>
-                                <div class="step-amount" id="method1-step2-amount">HK$8,900 → HK$8,750</div>
-                            </div>
-                            <div class="flow-step">
-                                <div class="flow-icon">3</div>
-                                <h4>eDDA入金 <span class="param-badge">c</span></h4>
-                                <p>从香港银行入金至券商</p>
-                                <div class="step-amount" id="method1-step3-amount">HK$8,750</div>
-                            </div>
-                            <div class="flow-step">
-                                <div class="flow-icon">4</div>
-                                <h4>兑换美元 <span class="param-badge">d</span></h4>
-                                <p>在券商账户内换汇</p>
-                                <div class="step-amount" id="method1-step4-amount">HK$8,750 → $1,120</div>
-                            </div>
-                        </div>
-                        <div class="method-total">
-                            <span>最终美元余额</span>
-                            <span id="method1-final">$1,120.00</span>
                         </div>
                     </div>
-                    <div class="method-card" id="method3-card">
-                        <div class="method-header">
+                    <div class="result-card" id="method3-result">
+                        <div class="result-header">
                             <h4>方式二: 直接美元入金</h4>
                             <span class="result-badge" id="method3-badge"></span>
                         </div>
-                        <div class="flow-steps">
-                            <div class="flow-step">
-                                <div class="flow-icon">1</div>
-                                <h4>人民币兑换美元 <span class="param-badge">g</span></h4>
-                                <p>大陆银行账户内兑换</p>
-                                <div class="step-amount" id="method3-step1-amount">¥10,000 → $1,385</div>
-                            </div>
-                            <div class="flow-step">
-                                <div class="flow-icon">2</div>
-                                <h4>跨境汇款 <span class="param-badge">h</span></h4>
-                                <p>美元汇至香港银行</p>
-                                <div class="step-amount" id="method3-step2-amount">$1,385 → $1,345</div>
-                            </div>
-                            <div class="flow-step">
-                                <div class="flow-icon">3</div>
-                                <h4>入金 <span class="param-badge">f</span></h4>
-                                <p>从香港银行入金至券商</p>
-                                <div class="step-amount" id="method3-step3-amount">$1,345 → $1,320</div>
+                        <div class="result-content">
+                            <div class="final-amount">
+                                <span>最终美元余额:</span>
+                                <span id="method3-final" class="final-value">$1,320.00</span>
                             </div>
                         </div>
-                        <div class="method-total">
-                            <span>最终美元余额</span>
-                            <span id="method3-final">$1,320.00</span>
-                        </div>
+                    </div>
+                </div>
+                
+                <!-- 移动方案优势区间分析到此处 -->
+                <div class="breakeven-analysis" id="breakeven-analysis">
+                    <h3>方案优势区间分析</h3>
+                    <div class="breakeven-card">
+                        <p>在当前参数设置下：</p>
+                        <ul>
+                            <li id="method1-range">方式一最优区间：人民币金额 <span id="method1-range-value">--</span></li>
+                            <li id="method2-range">方式二最优区间：人民币金额 <span id="method2-range-value">--</span></li>
+                        </ul>
+                        <p id="breakeven-point">转折点：当初始人民币金额为 <span id="breakeven-amount">--</span> 时，两种方式等效</p>
                     </div>
                 </div>
             </div>
@@ -686,7 +1459,274 @@
         <p>© 2023 香港券商入金对比计算器 | <a href="index.html">返回首页</a></p>
     </footer>
     <script>
-        // Format number to currency
+        // UI text configuration - all display text in one place
+        const uiTexts = {
+            // Header
+            pageTitle: "香港美股券商入金对比计算器",
+            pageSubtitle: "帮助您比较香港美股券商不同入金方式和费用，找出最佳入金方案",
+            
+            // Intro
+            introTitle: "美元入金方案对比",
+            introText: "从大陆银行人民币账户到香港券商的美元入金有两种常见方式。请填写下面的表单，我们将为您计算并对比各种方式的最终结果，帮您找出最优方案。",
+            
+            // Flow Diagram
+            flowTitle: "入金方式流程",
+            method1Name: "方式一: 港币入金再兑换美元",
+            method2Name: "方式二: 美元入金",
+            
+            // Method 1 Flow Steps
+            method1Steps: [
+                "兑换港币",
+                "跨境汇款",
+                "eDDA入金",
+                "兑换美元"
+            ],
+            
+            // Method 2 Flow Steps
+            method2Steps: [
+                "兑换美元",
+                "跨境汇款",
+                "入金"
+            ],
+            
+            // Calculator Form
+            formTitle: "费用与汇率设置",
+            initialAmountLabel: "初始人民币金额 (CNY)",
+            quickAmounts: [
+                { value: "100000", label: "10万" },
+                { value: "200000", label: "20万" },
+                { value: "500000", label: "50万" },
+                { value: "1000000", label: "100万" }
+            ],
+            
+            // Method 1 Parameters
+            method1ParamsTitle: "方式一: 兑换港币入金券商再兑换美元",
+            hkdRateLabel: "港币 - 银行外汇卖出价 (a)",
+            hkdFeeLabel: "港币跨境汇款手续费 (b)",
+            fixedFeeLabel: "固定手续费",
+            percentFeeLabel: "比例手续费 (%)",
+            feeFromHkd: "从港币中扣除",
+            feeFromCny: "从人民币中扣除",
+            totalFeeLabel: "总手续费",
+            brokerRateLabel: "券商汇率 (d)",
+            hkdToUsdToggle: "港币→美元",
+            usdToHkdToggle: "美元→港币",
+            
+            // Method 2 Parameters
+            method2ParamsTitle: "方式二: 直接兑换美元入金",
+            usdRateLabel: "美元 - 银行外汇卖出价 (g)",
+            usdFeeLabel: "美元跨境汇款手续费 (h)",
+            feeFromUsd: "从美元中扣除",
+            usdDepositFeeLabel: "美元汇款到券商手续费 (f)",
+            
+            // Calculation Button
+            calculateButton: "计算并比较",
+            
+            // Results
+            resultsTitle: "计算结果对比",
+            finalAmountLabel: "最终美元余额:",
+            bestMethodBadge: "最佳方案",
+            
+            // Breakeven Analysis
+            breakevenTitle: "方案优势区间分析",
+            breakevenIntro: "在当前参数设置下：",
+            method1RangePrefix: "方式一最优区间：人民币金额 ",
+            method2RangePrefix: "方式二最优区间：人民币金额 ",
+            breakevenPrefix: "转折点：当初始人民币金额为 ",
+            breakevenSuffix: " 时，两种方式等效",
+            alwaysSameMethodText: "在所有有效金额下，{method}始终优于另一方式",
+            methodsEqualText: "两种方式在所有金额下效率几乎相同",
+            
+            // Footer
+            footerText: "© 2025 香港券商入金对比计算器 | ",
+            footerLink: "返回首页"
+        };
+        
+        // Function to initialize UI with text from config
+        function initializeUIText() {
+            // Helper function to safely set text content of an element
+            function safeSetText(selector, text) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+            
+            // Helper function to safely set innerHTML of an element
+            function safeSetHTML(selector, html) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    element.innerHTML = html;
+                }
+            }
+            
+            // Set page title
+            document.title = uiTexts.pageTitle;
+            
+            // Header
+            safeSetText('header h1', uiTexts.pageTitle);
+            safeSetText('header p', uiTexts.pageSubtitle);
+            
+            // Intro section
+            safeSetText('.intro-text h3', uiTexts.introTitle);
+            safeSetText('.intro-text p', uiTexts.introText);
+            
+            // Flow diagram
+            safeSetText('#deposit-methods h3', uiTexts.flowTitle);
+            
+            // Method 1 flow
+            const methodFlowTitles = document.querySelectorAll('.method-flow-title');
+            if (methodFlowTitles.length > 0) {
+                methodFlowTitles[0].textContent = uiTexts.method1Name;
+            }
+            
+            const method1FlowLabels = document.querySelectorAll('.method-flow:first-child .flow-label');
+            uiTexts.method1Steps.forEach((step, index) => {
+                if (method1FlowLabels[index]) method1FlowLabels[index].textContent = step;
+            });
+            
+            // Method 2 flow
+            if (methodFlowTitles.length > 1) {
+                methodFlowTitles[1].textContent = uiTexts.method2Name;
+            }
+            
+            const method2FlowLabels = document.querySelectorAll('.method-flow:last-child .flow-label');
+            uiTexts.method2Steps.forEach((step, index) => {
+                if (method2FlowLabels[index]) method2FlowLabels[index].textContent = step;
+            });
+            
+            // Form section
+            safeSetText('.calculator-form h3', uiTexts.formTitle);
+            safeSetText('label[for="usd-rmb-amount"]', uiTexts.initialAmountLabel);
+            
+            // Configure quick amount buttons
+            const quickAmountButtons = document.querySelectorAll('.quick-amount-btn');
+            uiTexts.quickAmounts.forEach((amount, index) => {
+                if (quickAmountButtons[index]) {
+                    quickAmountButtons[index].textContent = amount.label;
+                    quickAmountButtons[index].setAttribute('data-amount', amount.value);
+                }
+            });
+            
+            // Method 1 parameters
+            const methodGroups = document.querySelectorAll('.method-group');
+            if (methodGroups.length > 0) {
+                const h4Elements = methodGroups[0].querySelectorAll('h4');
+                if (h4Elements.length > 0) {
+                    h4Elements[0].textContent = uiTexts.method1ParamsTitle;
+                }
+            }
+            
+            safeSetText('label[for="rmb-to-hkd-rate"]', uiTexts.hkdRateLabel + ' ');
+            safeSetText('label[for="hkd-transfer-fee-fixed"]', uiTexts.hkdFeeLabel);
+            
+            const method1FeeInputs = document.querySelectorAll('.method-group:first-child .fee-input');
+            if (method1FeeInputs.length > 0) {
+                const firstFeeLabel = method1FeeInputs[0].querySelector('label');
+                if (firstFeeLabel) {
+                    firstFeeLabel.innerHTML = `${uiTexts.fixedFeeLabel} (<span id="hkd-fee-currency-label">CNY</span>)`;
+                }
+                
+                if (method1FeeInputs.length > 1) {
+                    const secondFeeLabel = method1FeeInputs[1].querySelector('label');
+                    if (secondFeeLabel) {
+                        secondFeeLabel.textContent = uiTexts.percentFeeLabel;
+                    }
+                }
+            }
+            
+            const method1FeeOptions = document.querySelectorAll('.method-group:first-child .fee-currency-option');
+            if (method1FeeOptions.length > 0) {
+                method1FeeOptions[0].textContent = ' ' + uiTexts.feeFromHkd;
+                if (method1FeeOptions.length > 1) {
+                    method1FeeOptions[1].textContent = ' ' + uiTexts.feeFromCny;
+                }
+            }
+            
+            safeSetText('label[for="broker-hkd-to-usd"]', uiTexts.brokerRateLabel + ' ');
+            
+            const hkdToUsdToggle = document.getElementById('hkd-to-usd-toggle');
+            if (hkdToUsdToggle) {
+                hkdToUsdToggle.textContent = uiTexts.hkdToUsdToggle;
+            }
+            
+            const usdToHkdToggle = document.getElementById('usd-to-hkd-toggle');
+            if (usdToHkdToggle) {
+                usdToHkdToggle.textContent = uiTexts.usdToHkdToggle;
+            }
+            
+            // Method 2 parameters
+            if (methodGroups.length > 1) {
+                const h4Elements = methodGroups[1].querySelectorAll('h4');
+                if (h4Elements.length > 0) {
+                    h4Elements[0].textContent = uiTexts.method2ParamsTitle;
+                }
+            }
+            
+            safeSetText('label[for="rmb-to-usd-rate"]', uiTexts.usdRateLabel + ' ');
+            safeSetText('label[for="usd-transfer-fee-fixed"]', uiTexts.usdFeeLabel);
+            
+            const method2FeeInputs = document.querySelectorAll('.method-group:last-child .fee-input');
+            if (method2FeeInputs.length > 0) {
+                const firstFeeLabel = method2FeeInputs[0].querySelector('label');
+                if (firstFeeLabel) {
+                    firstFeeLabel.innerHTML = `${uiTexts.fixedFeeLabel} (<span id="usd-fee-currency-label">CNY</span>)`;
+                }
+                
+                if (method2FeeInputs.length > 1) {
+                    const secondFeeLabel = method2FeeInputs[1].querySelector('label');
+                    if (secondFeeLabel) {
+                        secondFeeLabel.textContent = uiTexts.percentFeeLabel;
+                    }
+                }
+            }
+            
+            const method2FeeOptions = document.querySelectorAll('.method-group:last-child .fee-currency-option');
+            if (method2FeeOptions.length > 0) {
+                method2FeeOptions[0].textContent = ' ' + uiTexts.feeFromUsd;
+                if (method2FeeOptions.length > 1) {
+                    method2FeeOptions[1].textContent = ' ' + uiTexts.feeFromCny;
+                }
+            }
+            
+            safeSetText('label[for="usd-deposit-fee"]', uiTexts.usdDepositFeeLabel);
+            
+            // Calculate button
+            safeSetText('#usd-calculate', uiTexts.calculateButton);
+            
+            // Results section
+            safeSetText('#comparison-results h3', uiTexts.resultsTitle);
+            
+            const resultHeaders = document.querySelectorAll('.result-header h4');
+            if (resultHeaders.length > 0) {
+                resultHeaders[0].textContent = uiTexts.method1Name;
+                if (resultHeaders.length > 1) {
+                    resultHeaders[1].textContent = uiTexts.method2Name;
+                }
+            }
+            
+            const finalAmounts = document.querySelectorAll('.final-amount span:first-child');
+            if (finalAmounts.length > 0) {
+                finalAmounts[0].textContent = uiTexts.finalAmountLabel;
+                if (finalAmounts.length > 1) {
+                    finalAmounts[1].textContent = uiTexts.finalAmountLabel;
+                }
+            }
+            
+            // Breakeven analysis
+            safeSetText('#breakeven-analysis h3', uiTexts.breakevenTitle);
+            safeSetText('.breakeven-card > p', uiTexts.breakevenIntro);
+            
+            // Footer
+            safeSetHTML('footer p', `${uiTexts.footerText}<a href="index.html">${uiTexts.footerLink}</a>`);
+        }
+        
+        // Format number with 6 decimal places for exchange rates
+        function formatExchangeRate(value, decimals = 6) {
+            return value.toFixed(decimals);
+        }
+        
+        // Format number to currency with 2 decimal places for money amounts
         function formatCurrency(value, currency) {
             const formatter = new Intl.NumberFormat('zh-HK', {
                 minimumFractionDigits: 2,
@@ -700,80 +1740,17 @@
             return `${symbols[currency]}${formatter.format(value)}`;
         }
         
-        // USD Calculator
-        document.getElementById('usd-calculate').addEventListener('click', () => {
-            // Get input values
-            const rmbAmount = parseFloat(document.getElementById('usd-rmb-amount').value) || 0;
-            const rmbToHkdRate = parseFloat(document.getElementById('rmb-to-hkd-rate').value) || 0;
-            const hkdTransferFee = parseFloat(document.getElementById('hkd-transfer-fee-usd').value) || 0;
-            const brokerHkdToUsdRate = parseFloat(document.getElementById('broker-hkd-to-usd').value) || 0;
-            const usdDepositFee = parseFloat(document.getElementById('usd-deposit-fee').value) || 0;
-            const rmbToUsdRate = parseFloat(document.getElementById('rmb-to-usd-rate').value) || 0;
-            const usdTransferFee = parseFloat(document.getElementById('usd-transfer-fee').value) || 0;
-            
-            // Method 1: CNY → HKD → Broker → USD
-            const method1HkdAmount = rmbAmount * rmbToHkdRate;
-            const method1HkdAfterTransfer = method1HkdAmount - hkdTransferFee;
-            const method1FinalUsd = method1HkdAfterTransfer * brokerHkdToUsdRate;
-            
-            // Method 2: CNY → USD → Broker
-            const method3UsdAmount = rmbAmount * rmbToUsdRate;
-            const method3UsdAfterTransfer = method3UsdAmount - usdTransferFee;
-            const method3FinalUsd = method3UsdAfterTransfer - usdDepositFee;
-            
-            // Update Method 1 results
-            document.getElementById('method1-step1-amount').textContent = `${formatCurrency(rmbAmount, 'CNY')} → ${formatCurrency(method1HkdAmount, 'HKD')}`;
-            document.getElementById('method1-step2-amount').textContent = `${formatCurrency(method1HkdAmount, 'HKD')} → ${formatCurrency(method1HkdAfterTransfer, 'HKD')}`;
-            document.getElementById('method1-step3-amount').textContent = `${formatCurrency(method1HkdAfterTransfer, 'HKD')}`;
-            document.getElementById('method1-step4-amount').textContent = `${formatCurrency(method1HkdAfterTransfer, 'HKD')} → ${formatCurrency(method1FinalUsd, 'USD')}`;
-            document.getElementById('method1-final').textContent = formatCurrency(method1FinalUsd, 'USD');
-            
-            // Update Method 2 results
-            document.getElementById('method3-step1-amount').textContent = `${formatCurrency(rmbAmount, 'CNY')} → ${formatCurrency(method3UsdAmount, 'USD')}`;
-            document.getElementById('method3-step2-amount').textContent = `${formatCurrency(method3UsdAmount, 'USD')} → ${formatCurrency(method3UsdAfterTransfer, 'USD')}`;
-            document.getElementById('method3-step3-amount').textContent = `${formatCurrency(method3UsdAfterTransfer, 'USD')} → ${formatCurrency(method3FinalUsd, 'USD')}`;
-            document.getElementById('method3-final').textContent = formatCurrency(method3FinalUsd, 'USD');
-            
-            // Determine the best method
-            const methods = [
-                { id: 'method1', value: method1FinalUsd },
-                { id: 'method3', value: method3FinalUsd }
-            ];
-            const bestMethod = methods.reduce((max, method) => method.value > max.value ? method : max, methods[0]);
-            
-            // Reset all cards and badges
-            document.querySelectorAll('.method-card').forEach(card => {
-                card.classList.remove('best');
-            });
-            document.querySelectorAll('.result-badge').forEach(badge => {
-                badge.textContent = '';
-            });
-            
-            // Highlight the best method
-            document.getElementById(`${bestMethod.id}-card`).classList.add('best');
-            document.getElementById(`${bestMethod.id}-badge`).textContent = '最佳方案';
-            
-            // Calculate and display percentage differences
-            methods.forEach(method => {
-                if (method.id !== bestMethod.id) {
-                    const diff = ((bestMethod.value - method.value) / method.value * 100).toFixed(2);
-                    document.getElementById(`${method.id}-badge`).textContent = `低${diff}%`;
-                }
-            });
-        });
-        
-        // Initialize calculations on page load
-        document.getElementById('usd-calculate').click();
-        
         // Fetch real-time exchange rates
-        async function fetchExchangeRates() {
+        async function fetchReferenceRates() {
             try {
-                const loadingSpinner = document.getElementById('loading-spinner');
-                const refreshIcon = document.getElementById('refresh-icon');
-                
-                if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
-                if (refreshIcon) refreshIcon.style.display = 'none';
-                
+                // Helper function to safely set text content
+                function safeSetText(id, text) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = text;
+                    }
+                }
+
                 // Using ExchangeRate-API (free tier)
                 const apiUrl = 'https://open.er-api.com/v6/latest/CNY';
                 const response = await fetch(apiUrl);
@@ -781,43 +1758,537 @@
                 
                 if (data.result === 'success') {
                     // Calculate the rates
-                    const cnyToHkd = data.rates.HKD;
-                    const cnyToUsd = data.rates.USD;
-                    const hkdToUsd = data.rates.USD / data.rates.HKD;
+                    const hkdToCny = 1 / data.rates.HKD; // HKD to CNY rate
+                    const usdToCny = 1 / data.rates.USD; // USD to CNY rate
+                    const hkdToUsd = data.rates.USD / data.rates.HKD; // HKD to USD rate
                     
-                    // Optional: Update input fields with current rates
-                    const rmbToHkdRate = document.getElementById('rmb-to-hkd-rate');
-                    const rmbToUsdRate = document.getElementById('rmb-to-usd-rate');
-                    const brokerHkdToUsdRate = document.getElementById('broker-hkd-to-usd');
+                    // Format the rates to 6 decimal places
+                    const formattedHkdRate = formatExchangeRate(hkdToCny);
+                    const formattedUsdRate = formatExchangeRate(usdToCny);
+                    const formattedHkdUsdRate = formatExchangeRate(hkdToUsd);
                     
-                    if (rmbToHkdRate) rmbToHkdRate.value = cnyToHkd.toFixed(3);
-                    if (rmbToUsdRate) rmbToUsdRate.value = cnyToUsd.toFixed(4);
-                    if (brokerHkdToUsdRate) brokerHkdToUsdRate.value = hkdToUsd.toFixed(4);
+                    // Update tooltips with the current reference rates
+                    const hkdInput = document.getElementById('rmb-to-hkd-rate');
+                    const usdInput = document.getElementById('rmb-to-usd-rate');
+                    const brokerHkdToUsdInput = document.getElementById('broker-hkd-to-usd');
                     
-                    // Recalculate with new rates
-                    document.getElementById('usd-calculate').click();
-                } else {
-                    throw new Error('API returned error');
+                    // Update the reference spans next to labels safely
+                    safeSetText('hkd-rate-reference', `(参考汇率: 1 HKD = ${formattedHkdRate} CNY)`);
+                    safeSetText('usd-rate-reference', `(参考汇率: 1 USD = ${formattedUsdRate} CNY)`);
+                    safeSetText('hkd-usd-rate-reference', `(参考汇率: 1 HKD = ${formattedHkdUsdRate} USD)`);
+                    
+                    if (hkdInput) {
+                        hkdInput.title = `参考汇率: 1 HKD = ${formattedHkdRate} CNY (银行卖出价可能更高)`;
+                    }
+                    
+                    if (usdInput) {
+                        usdInput.title = `参考汇率: 1 USD = ${formattedUsdRate} CNY (银行卖出价可能更高)`;
+                    }
+                    
+                    if (brokerHkdToUsdInput) {
+                        brokerHkdToUsdInput.title = `参考汇率: 1 HKD = ${formattedHkdUsdRate} USD`;
+                    }
+                    
+                    // Update the input values with a slight markup to simulate bank selling rates
+                    const bankMarkup = 1.01; // 1% markup
+                    if (hkdInput) {
+                        hkdInput.value = formatExchangeRate(hkdToCny * bankMarkup);
+                    }
+                    
+                    if (usdInput) {
+                        usdInput.value = formatExchangeRate(usdToCny * bankMarkup);
+                    }
+                    
+                    if (brokerHkdToUsdInput) {
+                        brokerHkdToUsdInput.value = formattedHkdUsdRate;
+                    }
+                    
+                    const brokerUsdToHkdInput = document.getElementById('broker-usd-to-hkd');
+                    if (brokerUsdToHkdInput) {
+                        brokerUsdToHkdInput.value = formatExchangeRate(1 / hkdToUsd);
+                    }
+                    
+                    // Recalculate with new rates - only if the calculate button exists
+                    const calculateButton = document.getElementById('usd-calculate');
+                    if (calculateButton) {
+                        calculateButton.click();
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching exchange rates:', error);
-            } finally {
-                const loadingSpinner = document.getElementById('loading-spinner');
-                const refreshIcon = document.getElementById('refresh-icon');
-                
-                if (loadingSpinner) loadingSpinner.style.display = 'none';
-                if (refreshIcon) refreshIcon.style.display = 'inline-block';
+                // Safe way to clear reference spans when rates can't be fetched
+                safeSetText('hkd-rate-reference', '');
+                safeSetText('usd-rate-reference', '');
+                safeSetText('hkd-usd-rate-reference', '');
             }
         }
         
-        // Add event listener for refresh button
-        const refreshButton = document.getElementById('refresh-rates');
-        if (refreshButton) {
-            refreshButton.addEventListener('click', fetchExchangeRates);
+        // Update fee currency labels and step values when radio buttons change
+        function updateFeeCurrencyLabels() {
+            // Update HKD fee label and step
+            const hkdFeeCurrency = document.querySelector('input[name="hkd-fee-currency"]:checked').value;
+            document.getElementById('hkd-fee-currency-label').textContent = hkdFeeCurrency;
+            
+            const hkdFeeInput = document.getElementById('hkd-transfer-fee-fixed');
+            if (hkdFeeCurrency === 'CNY') {
+                hkdFeeInput.step = '1';
+            } else {
+                hkdFeeInput.step = '1';  // Step is the same, but could be different if needed
+            }
+            
+            // Update USD fee label and step
+            const usdFeeCurrency = document.querySelector('input[name="usd-fee-currency"]:checked').value;
+            document.getElementById('usd-fee-currency-label').textContent = usdFeeCurrency;
+            
+            const usdFeeInput = document.getElementById('usd-transfer-fee-fixed');
+            if (usdFeeCurrency === 'CNY') {
+                usdFeeInput.step = '1';
+            } else {
+                usdFeeInput.step = '0.1';
+            }
+            
+            // Update totals with new currency settings
+            updateTotalFees();
+        }
+
+        // Calculate and display total fees
+        function updateTotalFees() {
+            const rmbAmount = parseFloat(document.getElementById('usd-rmb-amount').value) || 0;
+            const rmbToHkdRate = parseFloat(document.getElementById('rmb-to-hkd-rate').value) || 0;
+            const rmbToUsdRate = parseFloat(document.getElementById('rmb-to-usd-rate').value) || 0;
+            
+            // Get HKD fee settings
+            const hkdFixedFee = parseFloat(document.getElementById('hkd-transfer-fee-fixed').value) || 0;
+            const hkdPercentFee = parseFloat(document.getElementById('hkd-transfer-fee-percent').value) || 0;
+            const hkdFeeCurrency = document.querySelector('input[name="hkd-fee-currency"]:checked').value;
+            
+            // Calculate HKD amount
+            const hkdAmount = rmbAmount / rmbToHkdRate;
+            
+            // Calculate fees based on currency selection
+            if (hkdFeeCurrency === 'HKD') {
+                // First deduct fixed fee from HKD amount
+                const hkdAmountAfterFixedFee = Math.max(0, hkdAmount - hkdFixedFee);
+                // Then calculate percentage fee on the remaining amount
+                const hkdPercentFeeAmount = hkdAmountAfterFixedFee * hkdPercentFee / 100;
+                const hkdTotalFee = hkdFixedFee + hkdPercentFeeAmount;
+                document.getElementById('hkd-fee-total').textContent = `总手续费: ${formatCurrency(hkdTotalFee, 'HKD')}`;
+            } else {
+                // Fixed fee is in CNY, deducted directly from RMB
+                // Calculate HKD amount after RMB deduction
+                const remainingRmb = Math.max(0, rmbAmount - hkdFixedFee);
+                const hkdAmountAfterFixedFee = remainingRmb / rmbToHkdRate;
+                // Calculate percentage fee on this reduced HKD amount
+                const hkdPercentFeeAmount = hkdAmountAfterFixedFee * hkdPercentFee / 100;
+                document.getElementById('hkd-fee-total').textContent = 
+                    `总手续费: ${formatCurrency(hkdFixedFee, 'CNY')} (固定) + ${formatCurrency(hkdPercentFeeAmount, 'HKD')} (比例)`;
+            }
+            
+            // Get USD fee settings
+            const usdFixedFee = parseFloat(document.getElementById('usd-transfer-fee-fixed').value) || 0;
+            const usdPercentFee = parseFloat(document.getElementById('usd-transfer-fee-percent').value) || 0;
+            const usdFeeCurrency = document.querySelector('input[name="usd-fee-currency"]:checked').value;
+            
+            // Calculate USD amount
+            const usdAmount = rmbAmount / rmbToUsdRate;
+            
+            // Calculate fees based on currency selection
+            if (usdFeeCurrency === 'USD') {
+                // First deduct fixed fee from USD amount
+                const usdAmountAfterFixedFee = Math.max(0, usdAmount - usdFixedFee);
+                // Then calculate percentage fee on the remaining amount
+                const usdPercentFeeAmount = usdAmountAfterFixedFee * usdPercentFee / 100;
+                const usdTotalFee = usdFixedFee + usdPercentFeeAmount;
+                document.getElementById('usd-fee-total').textContent = `总手续费: ${formatCurrency(usdTotalFee, 'USD')}`;
+            } else {
+                // Fixed fee is in CNY, deducted directly from RMB
+                // Calculate USD amount after RMB deduction
+                const remainingRmb = Math.max(0, rmbAmount - usdFixedFee);
+                const usdAmountAfterFixedFee = remainingRmb / rmbToUsdRate;
+                // Calculate percentage fee on this reduced USD amount
+                const usdPercentFeeAmount = usdAmountAfterFixedFee * usdPercentFee / 100;
+                document.getElementById('usd-fee-total').textContent = 
+                    `总手续费: ${formatCurrency(usdFixedFee, 'CNY')} (固定) + ${formatCurrency(usdPercentFeeAmount, 'USD')} (比例)`;
+            }
         }
         
-        // Fetch rates on page load
-        document.addEventListener('DOMContentLoaded', fetchExchangeRates);
+        // Add event listeners to update total fees when inputs change
+        document.getElementById('usd-rmb-amount').addEventListener('input', updateTotalFees);
+        document.getElementById('rmb-to-hkd-rate').addEventListener('input', updateTotalFees);
+        document.getElementById('hkd-transfer-fee-fixed').addEventListener('input', updateTotalFees);
+        document.getElementById('hkd-transfer-fee-percent').addEventListener('input', updateTotalFees);
+        document.getElementById('rmb-to-usd-rate').addEventListener('input', updateTotalFees);
+        document.getElementById('usd-transfer-fee-fixed').addEventListener('input', updateTotalFees);
+        document.getElementById('usd-transfer-fee-percent').addEventListener('input', updateTotalFees);
+        
+        // Add event listeners for fee currency radio buttons
+        document.querySelectorAll('input[name="hkd-fee-currency"]').forEach(radio => {
+            radio.addEventListener('change', updateFeeCurrencyLabels);
+        });
+        
+        document.querySelectorAll('input[name="usd-fee-currency"]').forEach(radio => {
+            radio.addEventListener('change', updateFeeCurrencyLabels);
+        });
+        
+        // USD Calculator
+        document.getElementById('usd-calculate').addEventListener('click', () => {
+            // Get input values
+            let rmbAmount = parseFloat(document.getElementById('usd-rmb-amount').value) || 0;
+            const rmbToHkdRate = parseFloat(document.getElementById('rmb-to-hkd-rate').value) || 0;
+            const rmbToUsdRate = parseFloat(document.getElementById('rmb-to-usd-rate').value) || 0;
+            
+            // Get HKD fee settings
+            const hkdFixedFee = parseFloat(document.getElementById('hkd-transfer-fee-fixed').value) || 0;
+            const hkdPercentFee = parseFloat(document.getElementById('hkd-transfer-fee-percent').value) || 0;
+            const hkdFeeCurrency = document.querySelector('input[name="hkd-fee-currency"]:checked').value;
+            
+            // Get USD fee settings
+            const usdFixedFee = parseFloat(document.getElementById('usd-transfer-fee-fixed').value) || 0;
+            const usdPercentFee = parseFloat(document.getElementById('usd-transfer-fee-percent').value) || 0;
+            const usdFeeCurrency = document.querySelector('input[name="usd-fee-currency"]:checked').value;
+            
+            // Get broker exchange rate
+            let brokerHkdToUsdRate;
+            if (document.getElementById('hkd-to-usd-toggle').classList.contains('active')) {
+                brokerHkdToUsdRate = parseFloat(document.getElementById('broker-hkd-to-usd').value) || 0;
+            } else {
+                const usdToHkdRate = parseFloat(document.getElementById('broker-usd-to-hkd').value) || 0;
+                brokerHkdToUsdRate = usdToHkdRate ? 1 / usdToHkdRate : 0;
+            }
+            
+            const usdDepositFee = parseFloat(document.getElementById('usd-deposit-fee').value) || 0;
+            
+            // Method 1: CNY → HKD → Broker → USD
+            let method1RmbAmount = rmbAmount;
+            let method1RmbDeduction = 0;
+            
+            // If HKD fixed fee is deducted from RMB
+            if (hkdFeeCurrency === 'CNY' && hkdFixedFee > 0) {
+                method1RmbDeduction = hkdFixedFee;
+                method1RmbAmount -= method1RmbDeduction;
+                if (method1RmbAmount < 0) method1RmbAmount = 0;
+            }
+            
+            const method1HkdAmount = method1RmbAmount / rmbToHkdRate;
+            
+            // Calculate HKD fees
+            let method1HkdAfterFixedFee = method1HkdAmount;
+            
+            // Apply fixed fee if it's deducted from HKD
+            if (hkdFeeCurrency === 'HKD') {
+                method1HkdAfterFixedFee = Math.max(0, method1HkdAmount - hkdFixedFee);
+            }
+            
+            // Apply percentage fee after fixed fee deduction
+            const method1HkdPercentFee = method1HkdAfterFixedFee * hkdPercentFee / 100;
+            const method1HkdAfterTransfer = method1HkdAfterFixedFee - method1HkdPercentFee;
+            const method1FinalUsd = method1HkdAfterTransfer * brokerHkdToUsdRate;
+            
+            // Method 2: CNY → USD → Broker
+            let method2RmbAmount = rmbAmount;
+            let method2RmbDeduction = 0;
+            
+            // If USD fixed fee is deducted from RMB
+            if (usdFeeCurrency === 'CNY' && usdFixedFee > 0) {
+                method2RmbDeduction = usdFixedFee;
+                method2RmbAmount -= method2RmbDeduction;
+                if (method2RmbAmount < 0) method2RmbAmount = 0;
+            }
+            
+            const method2UsdAmount = method2RmbAmount / rmbToUsdRate;
+            
+            // Calculate USD fees
+            let method2UsdAfterFixedFee = method2UsdAmount;
+            
+            // Apply fixed fee if it's deducted from USD
+            if (usdFeeCurrency === 'USD') {
+                method2UsdAfterFixedFee = Math.max(0, method2UsdAmount - usdFixedFee);
+            }
+            
+            // Apply percentage fee after fixed fee deduction
+            const method2UsdPercentFee = method2UsdAfterFixedFee * usdPercentFee / 100;
+            const method2UsdAfterTransfer = method2UsdAfterFixedFee - method2UsdPercentFee;
+            const method2FinalUsd = method2UsdAfterTransfer - usdDepositFee;
+            
+            // REMOVE: This section tried to update elements that no longer exist
+            // We don't need to update step amounts anymore since they're not displayed
+            
+            // Update final USD amounts in the results section
+            document.getElementById('method1-final').textContent = formatCurrency(method1FinalUsd, 'USD');
+            document.getElementById('method3-final').textContent = formatCurrency(method2FinalUsd, 'USD');
+            
+            // Determine the best method
+            const methods = [
+                { id: 'method1', value: method1FinalUsd },
+                { id: 'method3', value: method2FinalUsd }
+            ];
+            const bestMethod = methods.reduce((max, method) => method.value > max.value ? method : max, methods[0]);
+            
+            // Reset all result cards and badges
+            document.querySelectorAll('.result-card').forEach(card => {
+                card.classList.remove('best');
+            });
+            document.querySelectorAll('.result-badge').forEach(badge => {
+                badge.textContent = '';
+            });
+            
+            // Highlight the best method in the new result cards section
+            document.getElementById(`${bestMethod.id}-result`).classList.add('best');
+            document.getElementById(`${bestMethod.id}-badge`).textContent = '最佳方案';
+            
+            // Calculate and display percentage differences with 2 decimal places
+            methods.forEach(method => {
+                if (method.id !== bestMethod.id) {
+                    const diff = formatExchangeRate((bestMethod.value - method.value) / method.value * 100, 2);
+                    document.getElementById(`${method.id}-badge`).textContent = `低${diff}%`;
+                }
+            });
+
+            // After calculating the methods and determining the best one, calculate the breakeven point
+            calculateBreakeven();
+        });
+
+        // Function to calculate the breakeven point between two methods
+        function calculateBreakeven() {
+            // Get all parameters
+            const rmbToHkdRate = parseFloat(document.getElementById('rmb-to-hkd-rate').value) || 0;
+            
+            // Get broker HKD to USD rate based on active toggle
+            let brokerHkdToUsdRate;
+            if (document.getElementById('hkd-to-usd-toggle').classList.contains('active')) {
+                brokerHkdToUsdRate = parseFloat(document.getElementById('broker-hkd-to-usd').value) || 0;
+            } else {
+                const usdToHkdRate = parseFloat(document.getElementById('broker-usd-to-hkd').value) || 0;
+                brokerHkdToUsdRate = usdToHkdRate ? 1 / usdToHkdRate : 0;
+            }
+            
+            const rmbToUsdRate = parseFloat(document.getElementById('rmb-to-usd-rate').value) || 0;
+            const usdDepositFee = parseFloat(document.getElementById('usd-deposit-fee').value) || 0;
+            
+            // Get HKD fee components
+            const hkdFixedFee = parseFloat(document.getElementById('hkd-transfer-fee-fixed').value) || 0;
+            const hkdPercentFee = parseFloat(document.getElementById('hkd-transfer-fee-percent').value) || 0;
+            const hkdFeeCurrency = document.querySelector('input[name="hkd-fee-currency"]:checked').value;
+            
+            // Get USD fee components
+            const usdFixedFee = parseFloat(document.getElementById('usd-transfer-fee-fixed').value) || 0;
+            const usdPercentFee = parseFloat(document.getElementById('usd-transfer-fee-percent').value) || 0;
+            const usdFeeCurrency = document.querySelector('input[name="usd-fee-currency"]:checked').value;
+            
+            // Calculate method results for a sample amount to determine which is better
+            // Use current input amount as reference
+            const sampleAmount = parseFloat(document.getElementById('usd-rmb-amount').value) || 10000;
+            
+            // Calculate Method 1 result at sample amount
+            let method1RmbAmount = sampleAmount;
+            if (hkdFeeCurrency === 'CNY' && hkdFixedFee > 0) {
+                method1RmbAmount = Math.max(0, sampleAmount - hkdFixedFee);
+            }
+            
+            const method1HkdAmount = method1RmbAmount / rmbToHkdRate;
+            let method1HkdAfterFixedFee = method1HkdAmount;
+            
+            if (hkdFeeCurrency === 'HKD') {
+                method1HkdAfterFixedFee = Math.max(0, method1HkdAmount - hkdFixedFee);
+            }
+            
+            const method1HkdPercentFee = method1HkdAfterFixedFee * hkdPercentFee / 100;
+            const method1HkdAfterTransfer = method1HkdAfterFixedFee - method1HkdPercentFee;
+            const method1FinalUsd = method1HkdAfterTransfer * brokerHkdToUsdRate;
+            
+            // Calculate Method 2 result at sample amount
+            let method2RmbAmount = sampleAmount;
+            if (usdFeeCurrency === 'CNY' && usdFixedFee > 0) {
+                method2RmbAmount = Math.max(0, sampleAmount - usdFixedFee);
+            }
+            
+            const method2UsdAmount = method2RmbAmount / rmbToUsdRate;
+            let method2UsdAfterFixedFee = method2UsdAmount;
+            
+            if (usdFeeCurrency === 'USD') {
+                method2UsdAfterFixedFee = Math.max(0, method2UsdAmount - usdFixedFee);
+            }
+            
+            const method2UsdPercentFee = method2UsdAfterFixedFee * usdPercentFee / 100;
+            const method2UsdAfterTransfer = method2UsdAfterFixedFee - method2UsdPercentFee;
+            const method2FinalUsd = method2UsdAfterTransfer - usdDepositFee;
+            
+            // Try to solve for breakeven amount algebraically
+            // For the simplified case without fees in different currencies
+            let a1 = (1 - hkdPercentFee/100) * brokerHkdToUsdRate / rmbToHkdRate;
+            let b1 = 0;
+            
+            if (hkdFeeCurrency === 'HKD') {
+                b1 = hkdFixedFee * brokerHkdToUsdRate;
+            }
+            
+            let a2 = (1 - usdPercentFee/100) / rmbToUsdRate;
+            let b2 = usdDepositFee;
+            
+            if (usdFeeCurrency === 'USD') {
+                b2 += usdFixedFee;
+            }
+            
+            // Different handling for fixed fees in CNY
+            // These would be direct deductions from the initial RMB amount
+            
+            const numerator = b1 - b2;
+            const denominator = a1 - a2;
+            
+            let breakevenAmount;
+            let method1Better = method1FinalUsd > method2FinalUsd;
+            let alwaysSameMethod = false;
+            
+            // Check if denominator is close to zero
+            if (Math.abs(denominator) < 0.0000001) {
+                document.getElementById('method1-range').style.display = "none";
+                document.getElementById('method2-range').style.display = "none";
+                document.getElementById('breakeven-point').innerHTML = "两种方式在所有金额下效率几乎相同";
+                return;
+            }
+            
+            breakevenAmount = numerator / denominator;
+            
+            // If breakeven is negative, one method is always better
+            if (breakevenAmount <= 0) {
+                const betterMethod = method1Better ? "方式一" : "方式二";
+                document.getElementById('method1-range').style.display = "none";
+                document.getElementById('method2-range').style.display = "none";
+                document.getElementById('breakeven-point').innerHTML = `在所有有效金额下，${betterMethod}始终优于另一方式`;
+                return;
+            }
+            
+            // Format breakeven amount (don't try to access the element directly)
+            const formattedBreakeven = formatCurrency(breakevenAmount, 'CNY');
+            
+            // Calculate if Method 1 is better below or above the breakeven
+            // Use actual calculations rather than simplified formula
+            const testBelow = Math.max(100, breakevenAmount * 0.5);
+            const testAbove = breakevenAmount * 1.5;
+            
+            // Method 1 below breakeven
+            let test1RmbAmount = testBelow;
+            if (hkdFeeCurrency === 'CNY' && hkdFixedFee > 0) {
+                test1RmbAmount = Math.max(0, testBelow - hkdFixedFee);
+            }
+            
+            const test1HkdAmount = test1RmbAmount / rmbToHkdRate;
+            let test1HkdAfterFixedFee = test1HkdAmount;
+            
+            if (hkdFeeCurrency === 'HKD') {
+                test1HkdAfterFixedFee = Math.max(0, test1HkdAmount - hkdFixedFee);
+            }
+            
+            const test1HkdPercentFee = test1HkdAfterFixedFee * hkdPercentFee / 100;
+            const test1HkdAfterTransfer = test1HkdAfterFixedFee - test1HkdPercentFee;
+            const test1Method1Usd = test1HkdAfterTransfer * brokerHkdToUsdRate;
+            
+            // Method 2 below breakeven
+            let test1Method2RmbAmount = testBelow;
+            if (usdFeeCurrency === 'CNY' && usdFixedFee > 0) {
+                test1Method2RmbAmount = Math.max(0, testBelow - usdFixedFee);
+            }
+            
+            const test1Method2UsdAmount = test1Method2RmbAmount / rmbToUsdRate;
+            let test1Method2UsdAfterFixedFee = test1Method2UsdAmount;
+            
+            if (usdFeeCurrency === 'USD') {
+                test1Method2UsdAfterFixedFee = Math.max(0, test1Method2UsdAmount - usdFixedFee);
+            }
+            
+            const test1Method2UsdPercentFee = test1Method2UsdAfterFixedFee * usdPercentFee / 100;
+            const test1Method2UsdAfterTransfer = test1Method2UsdAfterFixedFee - test1Method2UsdPercentFee;
+            const test1Method2FinalUsd = test1Method2UsdAfterTransfer - usdDepositFee;
+            
+            const method1BetterBelow = test1Method1Usd > test1Method2FinalUsd;
+            
+            // Set the optimal ranges
+            if (method1BetterBelow) {
+                document.getElementById('method1-range-value').textContent = `小于 ${formattedBreakeven}`;
+                document.getElementById('method2-range-value').textContent = `大于或等于 ${formattedBreakeven}`;
+            } else {
+                document.getElementById('method1-range-value').textContent = `大于或等于 ${formattedBreakeven}`;
+                document.getElementById('method2-range-value').textContent = `小于 ${formattedBreakeven}`;
+            }
+            
+            document.getElementById('method1-range').style.display = "list-item";
+            document.getElementById('method2-range').style.display = "list-item";
+            
+            // Use innerHTML to create the breakeven-amount span rather than trying to access it directly
+            document.getElementById('breakeven-point').innerHTML = 
+                `转折点：当初始人民币金额为 <span id="breakeven-amount">${formattedBreakeven}</span> 时，两种方式等效`;
+        }
+        
+        // Exchange rate toggle functionality
+        document.getElementById('hkd-to-usd-toggle').addEventListener('click', function() {
+            setExchangeRateMode('hkd-to-usd');
+        });
+        
+        document.getElementById('usd-to-hkd-toggle').addEventListener('click', function() {
+            setExchangeRateMode('usd-to-hkd');
+        });
+        
+        function setExchangeRateMode(mode) {
+            // Update toggle buttons
+            document.getElementById('hkd-to-usd-toggle').classList.toggle('active', mode === 'hkd-to-usd');
+            document.getElementById('usd-to-hkd-toggle').classList.toggle('active', mode === 'usd-to-hkd');
+            
+            // Show/hide appropriate input fields
+            document.getElementById('hkd-to-usd-input-group').style.display = mode === 'hkd-to-usd' ? 'block' : 'none';
+            document.getElementById('usd-to-hkd-input-group').style.display = mode === 'usd-to-hkd' ? 'block' : 'none';
+            
+            // Convert the value when switching with 6 decimal places for exchange rates
+            if (mode === 'hkd-to-usd') {
+                const usdToHkdRate = parseFloat(document.getElementById('broker-usd-to-hkd').value);
+                if (usdToHkdRate && usdToHkdRate > 0) {
+                    document.getElementById('broker-hkd-to-usd').value = formatExchangeRate(1 / usdToHkdRate);
+                }
+            } else {
+                const hkdToUsdRate = parseFloat(document.getElementById('broker-hkd-to-usd').value);
+                if (hkdToUsdRate && hkdToUsdRate > 0) {
+                    document.getElementById('broker-usd-to-hkd').value = formatExchangeRate(1 / hkdToUsdRate);
+                }
+            }
+        }
+        
+        // Add quick amount button functionality
+        document.querySelectorAll('.quick-amount-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Set the input value
+                const amount = this.getAttribute('data-amount');
+                document.getElementById('usd-rmb-amount').value = amount;
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('.quick-amount-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update calculations
+                updateTotalFees();
+                document.getElementById('usd-calculate').click();
+            });
+        });
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize UI text
+            initializeUIText();
+            
+            // Fetch real-time rates when page loads
+            fetchReferenceRates();
+            
+            // Initialize fee totals
+            updateTotalFees();
+            
+            // Initialize calculations
+            document.getElementById('usd-calculate').click();
+            
+            // Initialize currency labels
+            updateFeeCurrencyLabels();
+        });
     </script>
 </body>
 </html>
