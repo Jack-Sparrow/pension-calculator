@@ -1238,6 +1238,57 @@
             color: white;
             border-color: var(--primary-color);
         }
+
+        /* Fee currency toggle styles - Enhanced */
+        .fee-currency-toggle {
+            display: flex;
+            margin-top: 0.8rem;
+            margin-bottom: 0.8rem;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .fee-currency-option {
+            margin: 0;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            border-radius: 4px;
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .fee-currency-option:hover {
+            background-color: rgba(26, 115, 232, 0.05);
+            border-color: var(--primary-color);
+        }
+
+        .fee-currency-option input[type="radio"] {
+            margin-right: 0.5rem;
+            width: auto;
+            accent-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* Style for the selected option */
+        .fee-currency-option input[type="radio"]:checked + span {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .fee-currency-option input[type="radio"]:checked {
+            border-color: var(--primary-color);
+        }
+
+        .fee-currency-option:has(input[type="radio"]:checked) {
+            background-color: rgba(26, 115, 232, 0.1);
+            border-color: var(--primary-color);
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>  
@@ -1336,10 +1387,12 @@
                                     <input type="number" id="hkd-transfer-fee-fixed" min="0" step="1" value="0">
                                     <div class="fee-currency-toggle">
                                         <label class="fee-currency-option">
-                                            <input type="radio" name="hkd-fee-currency" value="HKD"> 从港币中扣除
+                                            <input type="radio" name="hkd-fee-currency" value="HKD">
+                                            <span>从港币中扣除</span>
                                         </label>
                                         <label class="fee-currency-option">
-                                            <input type="radio" name="hkd-fee-currency" value="CNY" checked> 从人民币中扣除
+                                            <input type="radio" name="hkd-fee-currency" value="CNY" checked>
+                                            <span>从人民币中扣除</span>
                                         </label>
                                     </div>
                                 </div>
@@ -1386,10 +1439,12 @@
                                     <input type="number" id="usd-transfer-fee-fixed" min="0" step="0.1" value="0">
                                     <div class="fee-currency-toggle">
                                         <label class="fee-currency-option">
-                                            <input type="radio" name="usd-fee-currency" value="USD"> 从美元中扣除
+                                            <input type="radio" name="usd-fee-currency" value="USD">
+                                            <span>从美元中扣除</span>
                                         </label>
                                         <label class="fee-currency-option">
-                                            <input type="radio" name="usd-fee-currency" value="CNY" checked> 从人民币中扣除
+                                            <input type="radio" name="usd-fee-currency" value="CNY" checked>
+                                            <span>从人民币中扣除</span>
                                         </label>
                                     </div>
                                 </div>
@@ -1505,8 +1560,8 @@
             hkdFeeLabel: "港币跨境汇款手续费 (b)",
             fixedFeeLabel: "固定手续费",
             percentFeeLabel: "比例手续费 (%)",
-            feeFromHkd: "从港币中扣除",
-            feeFromCny: "从人民币中扣除",
+            feeFromHkd: "HKD扣除",
+            feeFromCny: "CNY扣除",
             totalFeeLabel: "总手续费",
             brokerRateLabel: "券商汇率 (d)",
             hkdToUsdToggle: "港币→美元",
@@ -1516,7 +1571,7 @@
             method2ParamsTitle: "方式二: 直接兑换美元入金",
             usdRateLabel: "美元 - 银行外汇卖出价 (g)",
             usdFeeLabel: "美元跨境汇款手续费 (h)",
-            feeFromUsd: "从美元中扣除",
+            feeFromUsd: "USD扣除",
             usdDepositFeeLabel: "美元汇款到券商手续费 (f)",
             
             // Calculation Button
@@ -1544,11 +1599,16 @@
         
         // Function to initialize UI with text from config
         function initializeUIText() {
+            console.log("Initializing UI text...");
+            
             // Helper function to safely set text content of an element
             function safeSetText(selector, text) {
                 const element = document.querySelector(selector);
                 if (element) {
                     element.textContent = text;
+                    console.log(`Updated text for '${selector}' to: ${text}`);
+                } else {
+                    console.warn(`Element not found for selector: '${selector}'`);
                 }
             }
             
@@ -1557,11 +1617,15 @@
                 const element = document.querySelector(selector);
                 if (element) {
                     element.innerHTML = html;
+                    console.log(`Updated HTML for '${selector}'`);
+                } else {
+                    console.warn(`Element not found for selector: '${selector}'`);
                 }
             }
             
             // Set page title
             document.title = uiTexts.pageTitle;
+            console.log(`Updated page title to: ${uiTexts.pageTitle}`);
             
             // Header
             safeSetText('header h1', uiTexts.pageTitle);
@@ -1637,9 +1701,9 @@
             
             const method1FeeOptions = document.querySelectorAll('.method-group:first-child .fee-currency-option');
             if (method1FeeOptions.length > 0) {
-                method1FeeOptions[0].textContent = ' ' + uiTexts.feeFromHkd;
+                method1FeeOptions[0].querySelector('span').textContent = uiTexts.feeFromHkd;
                 if (method1FeeOptions.length > 1) {
-                    method1FeeOptions[1].textContent = ' ' + uiTexts.feeFromCny;
+                    method1FeeOptions[1].querySelector('span').textContent = uiTexts.feeFromCny;
                 }
             }
             
@@ -1683,9 +1747,9 @@
             
             const method2FeeOptions = document.querySelectorAll('.method-group:last-child .fee-currency-option');
             if (method2FeeOptions.length > 0) {
-                method2FeeOptions[0].textContent = ' ' + uiTexts.feeFromUsd;
+                method2FeeOptions[0].querySelector('span').textContent = uiTexts.feeFromUsd;
                 if (method2FeeOptions.length > 1) {
-                    method2FeeOptions[1].textContent = ' ' + uiTexts.feeFromCny;
+                    method2FeeOptions[1].querySelector('span').textContent = uiTexts.feeFromCny;
                 }
             }
             
@@ -1720,6 +1784,10 @@
             // Footer
             safeSetHTML('footer p', `${uiTexts.footerText}<a href="index.html">${uiTexts.footerLink}</a>`);
         }
+        
+        // Call initializeUIText immediately after the script is loaded
+        // This ensures texts are set before the page is rendered
+        initializeUIText();
         
         // Format number with 6 decimal places for exchange rates
         function formatExchangeRate(value, decimals = 6) {
@@ -2274,8 +2342,7 @@
         
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize UI text
-            initializeUIText();
+            console.log("DOM fully loaded");
             
             // Fetch real-time rates when page loads
             fetchReferenceRates();
